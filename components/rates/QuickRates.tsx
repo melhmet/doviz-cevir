@@ -1,0 +1,98 @@
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Colors } from '@/constants/colors';
+import { RateCard } from './RateCard';
+import { useRatesStore } from '@/store/useRatesStore';
+import { getRate } from '@/utils/convert';
+import { formatTime } from '@/utils/format';
+
+const POPULAR_PAIRS = [
+  { from: 'EUR', to: 'TRY', change: 0.12 },
+  { from: 'GBP', to: 'TRY', change: -0.05 },
+  { from: 'CHF', to: 'TRY', change: 0.44 },
+  { from: 'JPY', to: 'TRY', change: 0.0 },
+];
+
+export function QuickRates() {
+  const { rates, lastUpdated } = useRatesStore();
+  const updateTime = lastUpdated ? formatTime(new Date(lastUpdated)) : '—';
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.headerTitle}>Popüler Kurlar</Text>
+          <View style={styles.headerUnderline} />
+        </View>
+        <Text style={styles.headerTime}>
+          Son Güncelleme: <Text style={styles.headerTimeValue}>{updateTime}</Text>
+        </Text>
+      </View>
+      <View style={styles.grid}>
+        {POPULAR_PAIRS.map((pair) => (
+          <View key={`${pair.from}/${pair.to}`} style={styles.gridItem}>
+            <RateCard
+              pair={`${pair.from}/${pair.to}`}
+              value={getRate(pair.from, pair.to, rates)}
+              change={pair.change}
+            />
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 40,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.outlineVariant + '33', // 20% opacity
+    paddingBottom: 8,
+    marginBottom: 16,
+  },
+  headerLeft: {
+    position: 'relative',
+  },
+  headerTitle: {
+    fontFamily: 'SpaceGrotesk-Bold',
+    fontSize: 11,
+    color: Colors.onSurface,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    paddingBottom: 8,
+  },
+  headerUnderline: {
+    position: 'absolute',
+    bottom: -1,
+    left: 0,
+    right: 0,
+    height: 2,
+    backgroundColor: Colors.primary,
+  },
+  headerTime: {
+    fontFamily: 'SpaceGrotesk-Bold',
+    fontSize: 9,
+    color: Colors.onSurfaceVariant,
+    letterSpacing: 0.5,
+    textTransform: 'lowercase',
+  },
+  headerTimeValue: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 9,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  gridItem: {
+    width: '48%',
+    flexGrow: 1,
+  },
+});

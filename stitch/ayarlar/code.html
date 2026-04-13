@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DÖVİZÇEVİR - Ayarlar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb692",
+                        "on-tertiary-container": "#762f00",
+                        "surface-bright": "#353943",
+                        "surface": "#0f131c",
+                        "primary-container": "#00c9a7",
+                        "inverse-primary": "#006b58",
+                        "on-tertiary-fixed": "#341100",
+                        "tertiary-fixed": "#ffdbcb",
+                        "surface-container": "#1c1f29",
+                        "background": "#0f131c",
+                        "secondary-fixed": "#b3ebff",
+                        "inverse-surface": "#dfe2ef",
+                        "on-secondary-container": "#003f4e",
+                        "surface-dim": "#0f131c",
+                        "surface-variant": "#31353f",
+                        "on-tertiary": "#552000",
+                        "on-secondary-fixed-variant": "#004e5f",
+                        "primary": "#44e5c2",
+                        "outline-variant": "#3c4a45",
+                        "on-primary-fixed": "#002019",
+                        "on-secondary": "#003642",
+                        "error-container": "#93000a",
+                        "inverse-on-surface": "#2c303a",
+                        "secondary-container": "#00b2d6",
+                        "secondary": "#4cd6fb",
+                        "on-surface": "#dfe2ef",
+                        "surface-container-high": "#262a34",
+                        "primary-fixed-dim": "#38debb",
+                        "on-primary-fixed-variant": "#005142",
+                        "on-error": "#690005",
+                        "tertiary": "#ffc0a1",
+                        "surface-container-low": "#181b25",
+                        "on-primary": "#00382d",
+                        "on-surface-variant": "#bacac3",
+                        "on-secondary-fixed": "#001f27",
+                        "on-tertiary-fixed-variant": "#793100",
+                        "surface-tint": "#38debb",
+                        "surface-container-lowest": "#0a0e17",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-container": "#004e40",
+                        "tertiary-container": "#ff9862",
+                        "on-background": "#dfe2ef",
+                        "error": "#ffb4ab",
+                        "outline": "#85948e",
+                        "secondary-fixed-dim": "#4cd6fb",
+                        "surface-container-highest": "#31353f",
+                        "primary-fixed": "#5ffbd6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #0a0e17; font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .terminal-glow { text-shadow: 0 0 10px rgba(68, 229, 194, 0.4); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface select-none">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0a0e17] flex items-center justify-between px-6 h-16 w-full max-w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#44e5c2]" data-icon="terminal">terminal</span>
+<h1 class="text-xl font-bold tracking-widest text-[#44e5c2] font-['Space_Grotesk'] tracking-tight uppercase">DÖVİZÇEVİR</h1>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[#44e5c2] hover:text-[#4cd6fb] transition-colors duration-0 cursor-pointer" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+</header>
+<!-- Ticker Tape (Signature Component) -->
+<div class="fixed top-16 w-full bg-surface-container-lowest h-8 flex items-center overflow-hidden border-y border-outline-variant/10 z-40">
+<div class="flex whitespace-nowrap animate-marquee font-mono text-[10px] uppercase tracking-widest text-secondary px-4">
+<span class="mx-4">USD/TRY 32.42 <span class="text-primary">▲ 0.12%</span></span>
+<span class="mx-4">EUR/TRY 35.15 <span class="text-error">▼ 0.05%</span></span>
+<span class="mx-4">BTC/USD 64,210 <span class="text-primary">▲ 2.45%</span></span>
+<span class="mx-4">ETH/TRY 102,450 <span class="text-primary">▲ 1.12%</span></span>
+<span class="mx-4">GBP/TRY 41.20 <span class="text-error">▼ 0.18%</span></span>
+</div>
+</div>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-24 px-6 max-w-2xl mx-auto min-h-screen">
+<div class="mb-12">
+<h2 class="text-[1.75rem] font-bold uppercase tracking-tight text-primary terminal-glow">Ayarlar</h2>
+<div class="h-1 w-12 bg-primary mt-2"></div>
+</div>
+<div class="space-y-12">
+<!-- Section: Görünüm -->
+<section>
+<h3 class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary"></span> Görünüm
+                </h3>
+<div class="bg-surface-container p-6 space-y-6">
+<div class="flex flex-col gap-4">
+<label class="text-sm font-medium">Tema Modu</label>
+<div class="flex bg-surface-container-lowest p-1">
+<button class="flex-1 py-2 text-[10px] font-bold uppercase tracking-widest bg-primary text-on-primary">Karanlık</button>
+<button class="flex-1 py-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Aydınlık</button>
+<button class="flex-1 py-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-colors">Sistem</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Varsayılan -->
+<section>
+<h3 class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary"></span> Varsayılan
+                </h3>
+<div class="space-y-[1px] bg-outline-variant/20">
+<div class="bg-surface-container p-6 flex justify-between items-center hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex flex-col">
+<span class="text-sm font-medium">Ana Para Birimi</span>
+<span class="text-xs text-on-surface-variant font-mono">TRY - Türk Lirası</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-surface-container p-6 flex justify-between items-center hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex flex-col">
+<span class="text-sm font-medium">Ondalık Hassasiyeti</span>
+<span class="text-xs text-on-surface-variant font-mono">4 Basamak</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Section: Bildirimler -->
+<section>
+<h3 class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary"></span> Bildirimler
+                </h3>
+<div class="bg-surface-container p-6 space-y-8">
+<div class="flex justify-between items-center">
+<div class="flex flex-col">
+<span class="text-sm font-medium">Fiyat Alarmları</span>
+<span class="text-xs text-on-surface-variant">Hedef kura ulaşıldığında uyar</span>
+</div>
+<!-- Custom Teal Toggle -->
+<div class="w-12 h-6 bg-primary flex items-center px-1 cursor-pointer">
+<div class="w-4 h-4 bg-on-primary ml-auto"></div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex flex-col">
+<span class="text-sm font-medium">Günlük Özet</span>
+<span class="text-xs text-on-surface-variant">Piyasa açılış raporu</span>
+</div>
+<!-- Custom Teal Toggle Off -->
+<div class="w-12 h-6 bg-surface-container-highest flex items-center px-1 cursor-pointer">
+<div class="w-4 h-4 bg-outline-variant"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Hakkında -->
+<section class="pb-8">
+<h3 class="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary"></span> Hakkında
+                </h3>
+<div class="space-y-[1px] bg-outline-variant/20">
+<div class="bg-surface-container p-6 flex justify-between items-center hover:bg-surface-bright transition-colors cursor-pointer group">
+<span class="text-sm font-medium">Sürüm</span>
+<span class="text-xs text-secondary font-mono">V 2.4.0-STABLE</span>
+</div>
+<div class="bg-surface-container p-6 flex justify-between items-center hover:bg-surface-bright transition-colors cursor-pointer group">
+<span class="text-sm font-medium">Kullanım Koşulları</span>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" data-icon="open_in_new">open_in_new</span>
+</div>
+<div class="bg-surface-container p-6 flex justify-between items-center hover:bg-surface-bright transition-colors cursor-pointer group">
+<span class="text-sm font-medium text-error/80">Verileri Sıfırla</span>
+<span class="material-symbols-outlined text-error/80" data-icon="delete_forever">delete_forever</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#0a0e17] border-t border-[#3c4a45]/20 backdrop-blur-xl flex justify-around items-center w-full px-4 h-20">
+<a class="flex flex-col items-center justify-center text-[#bacac3] opacity-60 pt-2 pb-4 hover:opacity-100 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="currency_exchange">currency_exchange</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-tighter uppercase">CONVERT</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#bacac3] opacity-60 pt-2 pb-4 hover:opacity-100 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="monitoring">monitoring</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-tighter uppercase">MARKETS</span>
+</a>
+<!-- Active State: SETTINGS -->
+<a class="flex flex-col items-center justify-center text-[#44e5c2] border-t-2 border-[#44e5c2] pt-2 pb-4 transition-all duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings_input_component" style="font-variation-settings: 'FILL' 1;">settings_input_component</span>
+<span class="font-['Space_Grotesk'] text-[10px] font-bold tracking-tighter uppercase">SETTINGS</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb692",
+                    "on-tertiary-container": "#762f00",
+                    "surface-bright": "#353943",
+                    "surface": "#0f131c",
+                    "primary-container": "#00c9a7",
+                    "inverse-primary": "#006b58",
+                    "on-tertiary-fixed": "#341100",
+                    "tertiary-fixed": "#ffdbcb",
+                    "surface-container": "#1c1f29",
+                    "background": "#0f131c",
+                    "secondary-fixed": "#b3ebff",
+                    "inverse-surface": "#dfe2ef",
+                    "on-secondary-container": "#003f4e",
+                    "surface-dim": "#0f131c",
+                    "surface-variant": "#31353f",
+                    "on-tertiary": "#552000",
+                    "on-secondary-fixed-variant": "#004e5f",
+                    "primary": "#44e5c2",
+                    "outline-variant": "#3c4a45",
+                    "on-primary-fixed": "#002019",
+                    "on-secondary": "#003642",
+                    "error-container": "#93000a",
+                    "inverse-on-surface": "#2c303a",
+                    "secondary-container": "#00b2d6",
+                    "secondary": "#4cd6fb",
+                    "on-surface": "#dfe2ef",
+                    "surface-container-high": "#262a34",
+                    "primary-fixed-dim": "#38debb",
+                    "on-primary-fixed-variant": "#005142",
+                    "on-error": "#690005",
+                    "tertiary": "#ffc0a1",
+                    "surface-container-low": "#181b25",
+                    "on-primary": "#00382d",
+                    "on-surface-variant": "#bacac3",
+                    "on-secondary-fixed": "#001f27",
+                    "on-tertiary-fixed-variant": "#793100",
+                    "surface-tint": "#38debb",
+                    "surface-container-lowest": "#0a0e17",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-container": "#004e40",
+                    "tertiary-container": "#ff9862",
+                    "on-background": "#dfe2ef",
+                    "error": "#ffb4ab",
+                    "outline": "#85948e",
+                    "secondary-fixed-dim": "#4cd6fb",
+                    "surface-container-highest": "#31353f",
+                    "primary-fixed": "#5ffbd6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk", "sans-serif"],
+                    "body": ["Space Grotesk", "sans-serif"],
+                    "label": ["Space Grotesk", "sans-serif"],
+                    "mono": ["'JetBrains Mono'", "monospace"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #0a0e17; font-family: 'Space Grotesk', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .ticker-wrap { overflow: hidden; white-space: nowrap; }
+        .ticker-content { display: inline-block; animation: ticker 30s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .tech-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
+        .tech-mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+        
+        @keyframes progress-pulse {
+            0% { transform: scaleX(0); opacity: 0.4; }
+            50% { transform: scaleX(0.7); opacity: 1; }
+            100% { transform: scaleX(1); opacity: 0.4; }
+        }
+        .animate-progress-pulse {
+            animation: progress-pulse 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Pulsing progress line -->
+<div class="fixed top-0 left-0 h-[2px] w-full bg-[#00c9a7] z-[100] origin-left animate-progress-pulse"></div>
+<header class="fixed top-0 w-full z-50 bg-[#0a0e17]">
+<div class="flex items-center justify-between px-6 h-16 w-full max-w-full border-b border-primary/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#44e5c2]" data-icon="terminal">terminal</span>
+<h1 class="text-lg font-bold tracking-[0.2em] text-[#44e5c2] font-mono uppercase">DÖVİZÇEVİR</h1>
+</div>
+<button class="text-[#bacac3] hover:text-[#4cd6fb] transition-all duration-200 active:scale-90 hover:scale-110">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</button>
+</div>
+<div class="ticker-wrap bg-surface-container-lowest h-8 flex items-center border-b border-outline-variant/10">
+<div class="ticker-content flex gap-8 px-4 text-[10px] tech-mono text-[#44e5c2] tracking-wider uppercase">
+<span>USD/TRY 32.4510 ▲ 0.12%</span>
+<span>EUR/TRY 35.1290 ▼ 0.05%</span>
+<span>BTC/USD 64,231.50 ▲ 1.45%</span>
+<span>ETH/USD 3,452.12 ▲ 0.89%</span>
+<span>GBP/TRY 41.2245 ▼ 0.11%</span>
+<span>USD/TRY 32.4510 ▲ 0.12%</span>
+<span>EUR/TRY 35.1290 ▼ 0.05%</span>
+<span>BTC/USD 64,231.50 ▲ 1.45%</span>
+<span>ETH/USD 3,452.12 ▲ 0.89%</span>
+<span>GBP/TRY 41.2245 ▼ 0.11%</span>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-24 px-6 max-w-4xl mx-auto">
+<section class="mb-10">
+<h2 class="text-2xl font-bold tracking-tight uppercase mb-6 text-on-surface">Piyasa Kurları</h2>
+<div class="relative group">
+<span class="absolute left-0 bottom-3 text-outline group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</span>
+<input class="w-full bg-transparent border-0 border-b border-outline py-3 pl-10 focus:ring-0 focus:border-primary tech-mono text-sm tracking-wider uppercase placeholder:text-outline-variant" placeholder="SEMBOLLERDE ARA..." type="text"/>
+</div>
+</section>
+<section class="space-y-px">
+<div class="grid grid-cols-12 px-4 py-2 tech-label text-on-surface-variant border-b border-outline-variant/10">
+<div class="col-span-6">Varlık / İsim</div>
+<div class="col-span-4 text-right">Fiyat</div>
+<div class="col-span-2 text-right">Değişim</div>
+</div>
+<!-- List Items with subtle scale-up on hover/active -->
+<div class="grid grid-cols-12 items-center px-4 py-6 bg-surface-container-low hover:bg-surface-bright transition-all duration-200 cursor-pointer group border-b border-outline-variant/5 active:scale-[0.98] hover:scale-[1.01]">
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<img alt="USA Flag" class="w-6 h-4 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmcyZZZWhaDF5y39qbf_YjLsD0nQxjxYzU4662HZciEf3i-HqYJx129AMTAS5eS8hny8w0mIV4BAmEvpHZp6UsTUViB9oKCCQ2KZuHsxF--5RVYsvJbrxAwLI3Z3KsRqgNhU-tXVSq3woTiobH_0MFSmovGya73waJUWnye6JFwDmO8Xm5Z0SkEptCGGLEabwo3TCy_ZjzmOwzkJ6OnfqvbPUOTEgk-n-M77yFx6SYV5kzMLPhBHFiMTEn_Nq_CiiEqzdl83gyeAc"/>
+</div>
+<div>
+<div class="font-bold tech-mono text-[#44e5c2] group-hover:text-secondary transition-colors text-base uppercase">USD</div>
+<div class="tech-label text-on-surface-variant opacity-70" style="font-size: 10px;">Amerikan Doları</div>
+</div>
+</div>
+<div class="col-span-4 text-right tech-mono text-lg font-bold">32.4510</div>
+<div class="col-span-2 text-right tech-mono text-sm text-primary font-bold">+0.12%</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-6 bg-surface-container hover:bg-surface-bright transition-all duration-200 cursor-pointer group border-b border-outline-variant/5 active:scale-[0.98] hover:scale-[1.01]">
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<img alt="EU Flag" class="w-6 h-4 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx1bWrmUovPXZMY8zkTtf4eBfMy0m5LzVY-FSAfDirLIb-3TBfRpoUkXExbEIXoEXLmcue6ejshjvXyhd14EwkHhVs4VEEaRDtNTu7n_G3zMkfdTd5FGktS2UBWLou2-KFsWs--BgQnnPo6nUVWgO3Ubdh19eWB64J_xjM60CsYXsWO-dIsCEQf29h5EPna6fkpBdn3htDwYNXyY2giBpRwcZVPEkAmUX7DR8ZeTHKvYN8Sk_9iauQLlKdCt1GYZnqgyFANhT77EA"/>
+</div>
+<div>
+<div class="font-bold tech-mono text-[#44e5c2] group-hover:text-secondary transition-colors text-base uppercase">EUR</div>
+<div class="tech-label text-on-surface-variant opacity-70" style="font-size: 10px;">Euro</div>
+</div>
+</div>
+<div class="col-span-4 text-right tech-mono text-lg font-bold">35.1290</div>
+<div class="col-span-2 text-right tech-mono text-sm text-error font-bold">-0.05%</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-6 bg-surface-container-low hover:bg-surface-bright transition-all duration-200 cursor-pointer group border-b border-outline-variant/5 active:scale-[0.98] hover:scale-[1.01]">
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<img alt="UK Flag" class="w-6 h-4 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP1tyCV2SWM1okXheYQKJQJZdsINS54GcaXVtmbiZaMQU1FaEnDMcGo0t9hWwepl87olE8jK26tF8nz2DaYlaagZu6AB-qNeiwgYYiVsNCkIVlD7KGJXBFek5p7Jqsxia1TVO6cE4KpL470Uf0coo69_AFxw47dwmmaBBI0ZJBvmio0LspOuXzmVu4BalsuM2KNbXwkHpgO9kLo4Kfb3Hm_l1D-TUAVkG9MZDjLZ2zn4qy-f23vP_sIHbKpmb8KBHozZk4Wr_v4Go"/>
+</div>
+<div>
+<div class="font-bold tech-mono text-[#44e5c2] group-hover:text-secondary transition-colors text-base uppercase">GBP</div>
+<div class="tech-label text-on-surface-variant opacity-70" style="font-size: 10px;">İngiliz Sterlini</div>
+</div>
+</div>
+<div class="col-span-4 text-right tech-mono text-lg font-bold">41.2245</div>
+<div class="col-span-2 text-right tech-mono text-sm text-error font-bold">-0.11%</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-6 bg-surface-container hover:bg-surface-bright transition-all duration-200 cursor-pointer group border-b border-outline-variant/5 active:scale-[0.98] hover:scale-[1.01]">
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary" data-icon="currency_bitcoin">currency_bitcoin</span>
+</div>
+<div>
+<div class="font-bold tech-mono text-[#44e5c2] group-hover:text-secondary transition-colors text-base uppercase">BTC</div>
+<div class="tech-label text-on-surface-variant opacity-70" style="font-size: 10px;">Bitcoin</div>
+</div>
+</div>
+<div class="col-span-4 text-right tech-mono text-lg font-bold">2,084,120</div>
+<div class="col-span-2 text-right tech-mono text-sm text-primary font-bold">+1.45%</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-6 bg-surface-container-low hover:bg-surface-bright transition-all duration-200 cursor-pointer group border-b border-outline-variant/5 active:scale-[0.98] hover:scale-[1.01]">
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<img alt="CH Flag" class="w-6 h-4 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXWg_4ALwCcNDeIWiDZpewGld7BbHmoYQxWZm62DXolH-kENCf0Q9XT__IYyW-6_PRGrK9nQyOb-wUe62Rz2Zr7FEkahZ2AS8glyobsMHQWshMnLttuhrqjhOiwJhf10iEdt2CpWHERbQuZqUSVZx3sMKTJ5u-6tHyQY1K0ZOBdz2pwlVIpaDOcKx5-upEaUC_ZQEaSOfQmdS0A_gm1ll0uZgeJ3XaxolqT3rMqrFXAwwv05BGxo91ydEPeitPPKmaQ2X0mf2LVIE"/>
+</div>
+<div>
+<div class="font-bold tech-mono text-[#44e5c2] group-hover:text-secondary transition-colors text-base uppercase">CHF</div>
+<div class="tech-label text-on-surface-variant opacity-70" style="font-size: 10px;">İsviçre Frangı</div>
+</div>
+</div>
+<div class="col-span-4 text-right tech-mono text-lg font-bold">36.7840</div>
+<div class="col-span-2 text-right tech-mono text-sm text-primary font-bold">+0.08%</div>
+</div>
+<div class="grid grid-cols-12 items-center px-4 py-6 bg-surface-container hover:bg-surface-bright transition-all duration-200 cursor-pointer group border-b border-outline-variant/5 active:scale-[0.98] hover:scale-[1.01]">
+<div class="col-span-6 flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center border border-outline-variant/20">
+<img alt="JP Flag" class="w-6 h-4 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs3tp9QDT2iiDFwJel8v-oLU381X13y-9IR209DBacBjeJTvxbZ3tzjXRU01lGFiAV5QjOfGJxh8Q0qGi0S2p17r2d8GjNeLfzDAb_UvMfELC1bw6pLqx3Wv2EVTMtfb07ThqTlgbNnp9VgrqTVZ16RKSVsCInfCDiYXeSFX-7z2A4lj3V2XaW6d21y0svAj39VqaITbwX-kA4P_KLiEgpBYsQU1hA6uuQ0_i5AO-0MsNBjFxqAJqtDSloHvyxe9e11eOc1yj4NH4"/>
+</div>
+<div>
+<div class="font-bold tech-mono text-[#44e5c2] group-hover:text-secondary transition-colors text-base uppercase">JPY</div>
+<div class="tech-label text-on-surface-variant opacity-70" style="font-size: 10px;">Japon Yeni</div>
+</div>
+</div>
+<div class="col-span-4 text-right tech-mono text-lg font-bold">0.2145</div>
+<div class="col-span-2 text-right tech-mono text-sm text-error font-bold">-0.32%</div>
+</div>
+</section>
+<div class="mt-12 p-8 border border-primary/10 bg-surface-container-lowest transition-transform duration-200 hover:scale-[1.005]">
+<div class="flex items-start gap-6">
+<div class="flex-1">
+<h3 class="tech-label text-[#44e5c2] mb-3">Piyasa Analizi</h3>
+<p class="text-on-surface-variant text-xs leading-relaxed font-medium">Merkez Bankası verilerine göre bugün piyasalarda volatilitenin düşük seyretmesi bekleniyor. <span class="tech-mono text-[#44e5c2]">USD/TRY</span> paritesi teknik direnç seviyesi olan <span class="tech-mono text-[#44e5c2]">32.60</span> bölgesini test edebilir.</p>
+</div>
+<div class="w-20 h-20 bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[#44e5c2] text-3xl" data-icon="query_stats">query_stats</span>
+</div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 w-full z-50 bg-[#0a0e17] border-t border-primary/10 backdrop-blur-xl">
+<div class="flex justify-around items-center w-full px-4 h-20">
+<a class="flex flex-col items-center justify-center text-[#bacac3] opacity-60 pt-2 pb-4 hover:opacity-100 transition-all duration-200 active:scale-90 hover:scale-110" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="currency_exchange">currency_exchange</span>
+<span class="tech-label" style="font-size: 9px;">CONVERT</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#44e5c2] border-t-2 border-[#44e5c2] pt-2 pb-4 transition-all duration-200 active:scale-90 hover:scale-110" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="monitoring">monitoring</span>
+<span class="tech-label" style="font-size: 9px;">MARKETS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#bacac3] opacity-60 pt-2 pb-4 hover:opacity-100 transition-all duration-200 active:scale-90 hover:scale-110" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings_input_component">settings_input_component</span>
+<span class="tech-label" style="font-size: 9px;">SETTINGS</span>
+</a>
+</div>
+</nav>
+</body></html>
