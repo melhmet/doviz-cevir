@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SearchInputProps {
   value: string;
@@ -10,16 +10,18 @@ interface SearchInputProps {
 }
 
 export function SearchInput({ value, onChangeText, placeholder = 'SEMBOLLERDE ARA...' }: SearchInputProps) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
-      <MaterialIcons name="search" size={22} color={Colors.outline} style={styles.icon} />
+    <View style={[styles.container, { borderBottomColor: colors.outline }]}>
+      <MaterialIcons name="search" size={22} color={colors.outline} style={styles.icon} />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: colors.onSurface }]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={Colors.outlineVariant}
-        selectionColor={Colors.primary}
+        placeholderTextColor={colors.outlineVariant}
+        selectionColor={colors.primary}
         autoCapitalize="characters"
       />
     </View>
@@ -31,7 +33,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.outline,
     paddingBottom: 12,
   },
   icon: {
@@ -41,7 +42,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'JetBrainsMono',
     fontSize: 13,
-    color: Colors.onSurface,
     letterSpacing: 1,
     textTransform: 'uppercase',
     padding: 0,

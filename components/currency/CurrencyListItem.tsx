@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Currency } from '@/utils/currencies';
 
 interface CurrencyListItemProps {
@@ -10,23 +10,28 @@ interface CurrencyListItemProps {
 }
 
 export function CurrencyListItem({ currency, isSelected, onPress }: CurrencyListItemProps) {
+  const { colors } = useTheme();
+
   return (
     <Pressable
       style={({ pressed }) => [
         styles.container,
-        isSelected && styles.selected,
-        pressed && styles.pressed,
+        isSelected && { backgroundColor: colors.surfaceBright },
+        pressed && { backgroundColor: colors.surfaceContainerHigh },
       ]}
       onPress={onPress}
     >
-      <View style={styles.flagBox}>
+      <View style={[styles.flagBox, {
+        backgroundColor: colors.surfaceContainer,
+        borderColor: colors.outlineVariant + '33',
+      }]}>
         <Text style={styles.flag}>{currency.flag}</Text>
       </View>
       <View style={styles.info}>
-        <Text style={[styles.code, isSelected && styles.codeSelected]}>{currency.code}</Text>
-        <Text style={styles.name}>{currency.nameTR}</Text>
+        <Text style={[styles.code, { color: isSelected ? colors.primary : colors.onSurface }]}>{currency.code}</Text>
+        <Text style={[styles.name, { color: colors.onSurfaceVariant }]}>{currency.nameTR}</Text>
       </View>
-      <Text style={styles.symbol}>{currency.symbol}</Text>
+      <Text style={[styles.symbol, { color: colors.onSurfaceVariant }]}>{currency.symbol}</Text>
     </Pressable>
   );
 }
@@ -39,20 +44,12 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     gap: 14,
   },
-  selected: {
-    backgroundColor: Colors.surfaceBright,
-  },
-  pressed: {
-    backgroundColor: Colors.surfaceContainerHigh,
-  },
   flagBox: {
     width: 40,
     height: 40,
-    backgroundColor: Colors.surfaceContainer,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Colors.outlineVariant + '33',
   },
   flag: {
     fontSize: 22,
@@ -63,20 +60,14 @@ const styles = StyleSheet.create({
   code: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 16,
-    color: Colors.onSurface,
-  },
-  codeSelected: {
-    color: Colors.primary,
   },
   name: {
     fontFamily: 'SpaceGrotesk',
     fontSize: 12,
-    color: Colors.onSurfaceVariant,
     marginTop: 2,
   },
   symbol: {
     fontFamily: 'JetBrainsMono',
     fontSize: 16,
-    color: Colors.onSurfaceVariant,
   },
 });

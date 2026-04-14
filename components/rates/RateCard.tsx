@@ -1,52 +1,65 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useSettingsStore } from '@/store/useSettingsStore';
 import { formatNumberTR, formatChange } from '@/utils/format';
 
 interface RateCardProps {
   pair: string;
   value: number;
   change: number;
+  onPress?: () => void;
 }
 
-export function RateCard({ pair, value, change }: RateCardProps) {
+export function RateCard({ pair, value, change, onPress }: RateCardProps) {
+  const { colors } = useTheme();
+  const decimalPrecision = useSettingsStore((s) => s.decimalPrecision);
+
   const isPositive = change > 0;
   const isNeutral = change === 0;
   const changeColor = isNeutral
-    ? Colors.onSurfaceVariant
+    ? colors.onSurfaceVariant
     : isPositive
-      ? Colors.primary
-      : Colors.error;
+      ? colors.primary
+      : colors.error;
   const trendIcon = isNeutral
     ? 'horizontal-rule'
     : isPositive
       ? 'trending-up'
       : 'trending-down';
-  const trendColor = isNeutral ? Colors.onSurfaceVariant : isPositive ? Colors.secondary : Colors.error;
+  const trendColor = isNeutral ? colors.onSurfaceVariant : isPositive ? colors.secondary : colors.error;
 
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={({ pressed }) => [
+        styles.container,
+        {
+          backgroundColor: colors.surfaceContainerLow,
+          borderLeftColor: colors.outlineVariant + '4D',
+        },
+        pressed && { opacity: 0.85, backgroundColor: colors.surfaceContainerHigh },
+      ]}
+      onPress={onPress}
+    >
       <View style={styles.header}>
-        <Text style={styles.pair}>{pair}</Text>
+        <Text style={[styles.pair, { color: colors.onSurfaceVariant }]}>{pair}</Text>
         <MaterialIcons name={trendIcon as any} size={16} color={trendColor} />
       </View>
-      <Text style={styles.value}>
-        {value > 0 ? formatNumberTR(value, 4) : '—'}
+      <Text style={[styles.value, { color: colors.onSurface }]}>
+        {value > 0 ? formatNumberTR(value, decimalPrecision) : '—'}
       </Text>
       <Text style={[styles.change, { color: changeColor }]}>
         {formatChange(change)}
       </Text>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.surfaceContainerLow,
     padding: 20,
     borderLeftWidth: 1,
-    borderLeftColor: Colors.outlineVariant + '4D', // 30% opacity
   },
   header: {
     flexDirection: 'row',
@@ -57,12 +70,10 @@ const styles = StyleSheet.create({
   pair: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 11,
-    color: Colors.onSurfaceVariant,
   },
   value: {
     fontFamily: 'JetBrainsMono-ExtraBold',
     fontSize: 22,
-    color: Colors.onSurface,
   },
   change: {
     fontFamily: 'JetBrainsMono-Bold',

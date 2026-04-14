@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type ThemeMode = 'dark' | 'light' | 'system';
 
@@ -16,19 +16,25 @@ const options: { key: ThemeMode; label: string }[] = [
 ];
 
 export function ThemeToggle({ value, onChange }: ThemeToggleProps) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Tema Modu</Text>
-      <View style={styles.toggleRow}>
+    <View style={[styles.container, { backgroundColor: colors.surfaceContainer }]}>
+      <Text style={[styles.label, { color: colors.onSurface }]}>Tema Modu</Text>
+      <View style={[styles.toggleRow, { backgroundColor: colors.surfaceContainerLowest }]}>
         {options.map((opt) => {
           const isActive = value === opt.key;
           return (
             <Pressable
               key={opt.key}
-              style={[styles.option, isActive && styles.optionActive]}
+              style={[styles.option, isActive && [styles.optionActive, { backgroundColor: colors.primary }]]}
               onPress={() => onChange(opt.key)}
             >
-              <Text style={[styles.optionText, isActive && styles.optionTextActive]}>
+              <Text style={[
+                styles.optionText,
+                { color: colors.onSurfaceVariant },
+                isActive && { color: colors.onPrimary },
+              ]}>
                 {opt.label}
               </Text>
             </Pressable>
@@ -41,20 +47,17 @@ export function ThemeToggle({ value, onChange }: ThemeToggleProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.surfaceContainer,
     padding: 24,
     gap: 16,
   },
   label: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 11,
-    color: Colors.onSurface,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: Colors.surfaceContainerLowest,
     padding: 3,
   },
   option: {
@@ -62,17 +65,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
   },
-  optionActive: {
-    backgroundColor: Colors.primary,
-  },
+  optionActive: {},
   optionText: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 10,
-    color: Colors.onSurfaceVariant,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
-  },
-  optionTextActive: {
-    color: Colors.onPrimary,
   },
 });

@@ -3,32 +3,50 @@ import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 import { SearchInput } from '@/components/rates/SearchInput';
 import { CurrencyListItem } from '@/components/currency/CurrencyListItem';
 import { currencies } from '@/utils/currencies';
 import { useCurrencyStore } from '@/store/useCurrencyStore';
+import { useSettingsStore } from '@/store/useSettingsStore';
+
+type Target = 'from' | 'to' | 'settings-default';
+
+const TITLES: Record<Target, string> = {
+  from: 'Gönderilen Birim',
+  to: 'Alınan Birim',
+  'settings-default': 'Varsayılan Para Birimi',
+};
 
 export default function CurrencySelectScreen() {
   const router = useRouter();
-  const { target } = useLocalSearchParams<{ target: 'from' | 'to' }>();
+  const { target } = useLocalSearchParams<{ target: Target }>();
   const { fromCurrency, toCurrency, setFromCurrency, setToCurrency } = useCurrencyStore();
+  const { defaultCurrency, setDefaultCurrency } = useSettingsStore();
+  const { colors } = useTheme();
   const [search, setSearch] = useState('');
 
-  const selectedCode = target === 'from' ? fromCurrency : toCurrency;
+  const selectedCode =
+    target === 'settings-default'
+      ? defaultCurrency
+      : target === 'from'
+        ? fromCurrency
+        : toCurrency;
 
   const filtered = useMemo(() => {
-    const q = search.toUpperCase();
+    const q = search.toLocaleLowerCase('tr-TR');
     return currencies.filter(
       (c) =>
-        c.code.includes(q) ||
-        c.nameTR.toUpperCase().includes(q) ||
-        c.nameEN.toUpperCase().includes(q)
+        c.code.toLocaleLowerCase('tr-TR').includes(q) ||
+        c.nameTR.toLocaleLowerCase('tr-TR').includes(q) ||
+        c.nameEN.toLocaleLowerCase('tr-TR').includes(q)
     );
   }, [search]);
 
   const handleSelect = (code: string) => {
-    if (target === 'from') {
+    if (target === 'settings-default') {
+      setDefaultCurrency(code);
+    } else if (target === 'from') {
       setFromCurrency(code);
     } else {
       setToCurrency(code);
@@ -37,14 +55,14 @@ export default function CurrencySelectScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.surfaceContainerLowest }]} edges={['top']}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { borderBottomColor: colors.outlineVariant + '1A' }]}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <MaterialIcons name="close" size={24} color={Colors.onSurface} />
+          <MaterialIcons name="close" size={24} color={colors.onSurface} />
         </Pressable>
-        <Text style={styles.title}>
-          {target === 'from' ? 'Gönderilen Birim' : 'Alınan Birim'}
+        <Text style={[styles.title, { color: colors.onSurface }]}>
+          {TITLES[target as Target] || 'Para Birimi Seç'}
         </Text>
         <View style={styles.backButton} />
       </View>
@@ -66,7 +84,9 @@ export default function CurrencySelectScreen() {
           />
         )}
         showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ItemSeparatorComponent={() => (
+          <View style={[styles.separator, { backgroundColor: colors.outlineVariant + '0D' }]} />
+        )}
       />
     </SafeAreaView>
   );
@@ -75,7 +95,6 @@ export default function CurrencySelectScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.surfaceContainerLowest,
   },
   header: {
     flexDirection: 'row',
@@ -84,7 +103,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.outlineVariant + '1A',
   },
   backButton: {
     width: 40,
@@ -95,7 +113,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 14,
-    color: Colors.onSurface,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
@@ -105,7 +122,6 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: Colors.outlineVariant + '0D',
     marginHorizontal: 24,
   },
 });

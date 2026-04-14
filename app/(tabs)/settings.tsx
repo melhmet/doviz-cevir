@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Linking, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '@/constants/colors';
+import { useRouter } from 'expo-router';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Config } from '@/constants/config';
 import { TopAppBar } from '@/components/common/TopAppBar';
 import { ProgressLine } from '@/components/common/ProgressLine';
@@ -10,12 +11,40 @@ import { SectionHeader } from '@/components/settings/SectionHeader';
 import { ThemeToggle } from '@/components/settings/ThemeToggle';
 import { SettingsRow } from '@/components/settings/SettingsRow';
 import { ToggleSwitch } from '@/components/settings/ToggleSwitch';
+import { FavoritesSheet } from '@/components/common/FavoritesSheet';
+import { useSettingsStore } from '@/store/useSettingsStore';
+import { useCurrencyStore } from '@/store/useCurrencyStore';
 import { cache } from '@/services/cache';
+import { getCurrency } from '@/utils/currencies';
+
+const PRECISION_OPTIONS = [2, 3, 4, 5, 6];
 
 export default function SettingsScreen() {
-  const [themeMode, setThemeMode] = useState<'dark' | 'light' | 'system'>('dark');
-  const [priceAlerts, setPriceAlerts] = useState(true);
-  const [dailySummary, setDailySummary] = useState(false);
+  const router = useRouter();
+  const { colors } = useTheme();
+  const [showPrecisionPicker, setShowPrecisionPicker] = useState(false);
+  const [favoritesVisible, setFavoritesVisible] = useState(false);
+  const {
+    themeMode, setThemeMode,
+    defaultCurrency,
+    decimalPrecision, setDecimalPrecision,
+    resetSettings,
+  } = useSettingsStore();
+
+  const currency = getCurrency(defaultCurrency);
+  const currencyLabel = currency
+    ? `${currency.code} - ${currency.nameTR}`
+    : defaultCurrency;
+
+  const handleDefaultCurrency = () => {
+    router.push({ pathname: '/currency-select', params: { target: 'settings-default' } });
+  };
+
+  const handleTerms = () => {
+    Linking.openURL('https://www.exchangerate-api.com/terms').catch(() => {
+      Alert.alert('Hata', 'Bağlantı açılamadı.');
+    });
+  };
 
   const handleResetData = () => {
     Alert.alert(
@@ -26,16 +55,21 @@ export default function SettingsScreen() {
         {
           text: 'Sıfırla',
           style: 'destructive',
-          onPress: () => cache.clear(),
+          onPress: () => {
+            cache.clear();
+            resetSettings();
+            useCurrencyStore.getState().reset();
+            Alert.alert('Tamamlandı', 'Tüm veriler sıfırlandı.');
+          },
         },
       ]
     );
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.surfaceContainerLowest }]} edges={['top']}>
       <ProgressLine />
-      <TopAppBar />
+      <TopAppBar onWalletPress={() => setFavoritesVisible(true)} />
       <TickerTape />
       <ScrollView
         style={styles.scrollView}
@@ -44,8 +78,8 @@ export default function SettingsScreen() {
       >
         {/* Page Title */}
         <View style={styles.titleBlock}>
-          <Text style={styles.pageTitle}>Ayarlar</Text>
-          <View style={styles.titleUnderline} />
+          <Text style={[styles.pageTitle, { color: colors.primary }]}>Ayarlar</Text>
+          <View style={[styles.titleUnderline, { backgroundColor: colors.primary }]} />
         </View>
 
         {/* Görünüm */}
@@ -60,12 +94,14 @@ export default function SettingsScreen() {
           <View style={styles.rowGroup}>
             <SettingsRow
               label="Ana Para Birimi"
-              value="TRY - Türk Lirası"
+              value={currencyLabel}
+              onPress={handleDefaultCurrency}
             />
-            <View style={styles.rowSeparator} />
+            <View style={[styles.rowSeparator, { backgroundColor: colors.outlineVariant + '33' }]} />
             <SettingsRow
               label="Ondalık Hassasiyeti"
-              value="4 Basamak"
+              value={`${decimalPrecision} Basamak`}
+              onPress={() => setShowPrecisionPicker(true)}
             />
           </View>
         </View>
@@ -73,20 +109,20 @@ export default function SettingsScreen() {
         {/* Bildirimler */}
         <View style={styles.section}>
           <SectionHeader title="Bildirimler" />
-          <View style={styles.notificationGroup}>
+          <View style={[styles.notificationGroup, { backgroundColor: colors.surfaceContainer }]}>
             <View style={styles.notificationRow}>
               <View style={styles.notificationText}>
-                <Text style={styles.notificationLabel}>Fiyat Alarmları</Text>
-                <Text style={styles.notificationDesc}>Hedef kura ulaşıldığında uyar</Text>
+                <Text style={[styles.notificationLabel, { color: colors.onSurface }]}>Fiyat Alarmları</Text>
+                <Text style={[styles.notificationDesc, { color: colors.onSurfaceVariant }]}>Yakında</Text>
               </View>
-              <ToggleSwitch value={priceAlerts} onToggle={() => setPriceAlerts(!priceAlerts)} />
+              <ToggleSwitch value={false} onToggle={() => {}} disabled />
             </View>
             <View style={styles.notificationRow}>
               <View style={styles.notificationText}>
-                <Text style={styles.notificationLabel}>Günlük Özet</Text>
-                <Text style={styles.notificationDesc}>Piyasa açılış raporu</Text>
+                <Text style={[styles.notificationLabel, { color: colors.onSurface }]}>Günlük Özet</Text>
+                <Text style={[styles.notificationDesc, { color: colors.onSurfaceVariant }]}>Yakında</Text>
               </View>
-              <ToggleSwitch value={dailySummary} onToggle={() => setDailySummary(!dailySummary)} />
+              <ToggleSwitch value={false} onToggle={() => {}} disabled />
             </View>
           </View>
         </View>
@@ -95,16 +131,17 @@ export default function SettingsScreen() {
         <View style={styles.section}>
           <SectionHeader title="Hakkında" />
           <View style={styles.rowGroup}>
-            <View style={styles.versionRow}>
-              <Text style={styles.versionLabel}>Sürüm</Text>
-              <Text style={styles.versionValue}>V {Config.APP_VERSION}-STABLE</Text>
+            <View style={[styles.versionRow, { backgroundColor: colors.surfaceContainer }]}>
+              <Text style={[styles.versionLabel, { color: colors.onSurface }]}>Sürüm</Text>
+              <Text style={[styles.versionValue, { color: colors.secondary }]}>V {Config.APP_VERSION}-STABLE</Text>
             </View>
-            <View style={styles.rowSeparator} />
+            <View style={[styles.rowSeparator, { backgroundColor: colors.outlineVariant + '33' }]} />
             <SettingsRow
               label="Kullanım Koşulları"
               rightIcon="open-in-new"
+              onPress={handleTerms}
             />
-            <View style={styles.rowSeparator} />
+            <View style={[styles.rowSeparator, { backgroundColor: colors.outlineVariant + '33' }]} />
             <SettingsRow
               label="Verileri Sıfırla"
               rightIcon="delete-forever"
@@ -114,6 +151,65 @@ export default function SettingsScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Precision Picker Modal */}
+      <Modal
+        visible={showPrecisionPicker}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowPrecisionPicker(false)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setShowPrecisionPicker(false)}
+        >
+          <View style={[styles.modalContent, { backgroundColor: colors.surfaceContainer }]}>
+            <Text style={[styles.modalTitle, { color: colors.onSurface }]}>
+              Ondalık Hassasiyeti
+            </Text>
+            {PRECISION_OPTIONS.map((p) => {
+              const isSelected = p === decimalPrecision;
+              return (
+                <Pressable
+                  key={p}
+                  style={[
+                    styles.modalOption,
+                    { borderBottomColor: colors.outlineVariant + '1A' },
+                    isSelected && { backgroundColor: colors.primary + '1A' },
+                  ]}
+                  onPress={() => {
+                    setDecimalPrecision(p);
+                    setShowPrecisionPicker(false);
+                  }}
+                >
+                  <Text style={[
+                    styles.modalOptionText,
+                    { color: isSelected ? colors.primary : colors.onSurface },
+                  ]}>
+                    {p} Basamak
+                  </Text>
+                  {isSelected && (
+                    <View style={[styles.modalCheck, { backgroundColor: colors.primary }]} />
+                  )}
+                </Pressable>
+              );
+            })}
+            <Pressable
+              style={[styles.modalCancel, { borderTopColor: colors.outlineVariant + '33' }]}
+              onPress={() => setShowPrecisionPicker(false)}
+            >
+              <Text style={[styles.modalCancelText, { color: colors.onSurfaceVariant }]}>
+                İptal
+              </Text>
+            </Pressable>
+          </View>
+        </Pressable>
+      </Modal>
+
+      <FavoritesSheet
+        visible={favoritesVisible}
+        onClose={() => setFavoritesVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -121,7 +217,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.surfaceContainerLowest,
   },
   scrollView: {
     flex: 1,
@@ -137,14 +232,12 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 28,
-    color: Colors.primary,
     letterSpacing: -0.5,
     textTransform: 'uppercase',
   },
   titleUnderline: {
     height: 4,
     width: 48,
-    backgroundColor: Colors.primary,
     marginTop: 8,
   },
   section: {
@@ -155,10 +248,8 @@ const styles = StyleSheet.create({
   },
   rowSeparator: {
     height: 1,
-    backgroundColor: Colors.outlineVariant + '33',
   },
   notificationGroup: {
-    backgroundColor: Colors.surfaceContainer,
     padding: 24,
     gap: 28,
   },
@@ -173,18 +264,15 @@ const styles = StyleSheet.create({
   notificationLabel: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 11,
-    color: Colors.onSurface,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
   notificationDesc: {
     fontFamily: 'SpaceGrotesk',
     fontSize: 12,
-    color: Colors.onSurfaceVariant,
     marginTop: 4,
   },
   versionRow: {
-    backgroundColor: Colors.surfaceContainer,
     paddingHorizontal: 24,
     paddingVertical: 18,
     flexDirection: 'row',
@@ -194,13 +282,59 @@ const styles = StyleSheet.create({
   versionLabel: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 11,
-    color: Colors.onSurface,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
   versionValue: {
     fontFamily: 'JetBrainsMono',
     fontSize: 12,
-    color: Colors.secondary,
+  },
+  // Precision picker modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  modalContent: {
+    width: '100%',
+    maxWidth: 320,
+  },
+  modalTitle: {
+    fontFamily: 'SpaceGrotesk-Bold',
+    fontSize: 13,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    padding: 20,
+    paddingBottom: 12,
+  },
+  modalOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+  },
+  modalOptionText: {
+    fontFamily: 'JetBrainsMono-Bold',
+    fontSize: 14,
+    letterSpacing: 1,
+  },
+  modalCheck: {
+    width: 8,
+    height: 8,
+  },
+  modalCancel: {
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderTopWidth: 1,
+  },
+  modalCancelText: {
+    fontFamily: 'SpaceGrotesk-Bold',
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
   },
 });

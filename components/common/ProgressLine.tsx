@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export function ProgressLine() {
+  const { colors } = useTheme();
   const scaleX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(0.7)).current;
 
@@ -45,6 +46,7 @@ export function ProgressLine() {
         style={[
           styles.line,
           {
+            backgroundColor: colors.primaryContainer,
             opacity,
             transform: [{ scaleX }],
           },
@@ -64,7 +66,6 @@ const styles = StyleSheet.create({
   line: {
     height: 2,
     width: '100%',
-    backgroundColor: Colors.primaryContainer,
     transformOrigin: 'left',
   },
 });

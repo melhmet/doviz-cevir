@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useRatesStore } from '@/store/useRatesStore';
 import { formatNumberTR, formatChange } from '@/utils/format';
 
@@ -13,6 +13,7 @@ interface TickerItem {
 }
 
 export function TickerTape() {
+  const { colors } = useTheme();
   const scrollX = useRef(new Animated.Value(0)).current;
   const { rates } = useRatesStore();
 
@@ -39,15 +40,15 @@ export function TickerTape() {
   const renderItem = (item: TickerItem, index: number) => {
     const isPositive = item.change > 0;
     const changeColor = item.change === 0
-      ? Colors.onSurfaceVariant
+      ? colors.onSurfaceVariant
       : isPositive
-        ? Colors.primary
-        : Colors.error;
+        ? colors.primary
+        : colors.error;
 
     return (
       <View key={index} style={styles.item}>
-        <Text style={styles.pair}>{item.pair}</Text>
-        <Text style={styles.value}>
+        <Text style={[styles.pair, { color: colors.secondary }]}>{item.pair}</Text>
+        <Text style={[styles.value, { color: colors.onSurface }]}>
           {item.value > 0 ? formatNumberTR(item.value, 2) : '—'}
         </Text>
         <Text style={[styles.change, { color: changeColor }]}>
@@ -58,7 +59,10 @@ export function TickerTape() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      backgroundColor: colors.surfaceContainerLowest,
+      borderBottomColor: colors.outlineVariant + '1A',
+    }]}>
       <Animated.View
         style={[
           styles.scrollContent,
@@ -75,11 +79,9 @@ export function TickerTape() {
 const styles = StyleSheet.create({
   container: {
     height: 32,
-    backgroundColor: Colors.surfaceContainerLowest,
     overflow: 'hidden',
     justifyContent: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.outlineVariant + '1A', // 10% opacity
   },
   scrollContent: {
     flexDirection: 'row',
@@ -95,14 +97,12 @@ const styles = StyleSheet.create({
   pair: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 10,
-    color: Colors.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   value: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 10,
-    color: Colors.onSurface,
   },
   change: {
     fontFamily: 'JetBrainsMono',

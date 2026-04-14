@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useSettingsStore } from '@/store/useSettingsStore';
 import { formatNumberTR, formatChange } from '@/utils/format';
 import { getCurrency } from '@/utils/currencies';
 
@@ -13,39 +14,44 @@ interface RateListItemProps {
 }
 
 export function RateListItem({ code, price, change, index, onPress }: RateListItemProps) {
+  const { colors } = useTheme();
+  const decimalPrecision = useSettingsStore((s) => s.decimalPrecision);
   const currency = getCurrency(code);
   const isPositive = change > 0;
   const changeColor = change === 0
-    ? Colors.onSurfaceVariant
+    ? colors.onSurfaceVariant
     : isPositive
-      ? Colors.primary
-      : Colors.error;
+      ? colors.primary
+      : colors.error;
 
-  const bgColor = index % 2 === 0 ? Colors.surfaceContainerLow : Colors.surfaceContainer;
+  const bgColor = index % 2 === 0 ? colors.surfaceContainerLow : colors.surfaceContainer;
 
   return (
     <Pressable
       style={({ pressed }) => [
         styles.container,
-        { backgroundColor: bgColor },
-        pressed && styles.pressed,
+        { backgroundColor: bgColor, borderBottomColor: colors.outlineVariant + '0D' },
+        pressed && { backgroundColor: colors.surfaceBright },
       ]}
       onPress={onPress}
     >
       {/* Flag + Name */}
       <View style={styles.left}>
-        <View style={styles.flagBox}>
+        <View style={[styles.flagBox, {
+          backgroundColor: colors.surfaceContainer,
+          borderColor: colors.outlineVariant + '33',
+        }]}>
           <Text style={styles.flag}>{currency?.flag || '🏳️'}</Text>
         </View>
         <View>
-          <Text style={styles.code}>{code}</Text>
-          <Text style={styles.name}>{currency?.nameTR || code}</Text>
+          <Text style={[styles.code, { color: colors.primary }]}>{code}</Text>
+          <Text style={[styles.name, { color: colors.onSurfaceVariant }]}>{currency?.nameTR || code}</Text>
         </View>
       </View>
 
       {/* Price */}
-      <Text style={styles.price}>
-        {price > 0 ? formatNumberTR(price, price >= 1000 ? 0 : 4) : '—'}
+      <Text style={[styles.price, { color: colors.onSurface }]}>
+        {price > 0 ? formatNumberTR(price, price >= 1000 ? 0 : decimalPrecision) : '—'}
       </Text>
 
       {/* Change */}
@@ -63,10 +69,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 18,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.outlineVariant + '0D', // 5% opacity
-  },
-  pressed: {
-    backgroundColor: Colors.surfaceBright,
   },
   left: {
     flex: 6,
@@ -77,11 +79,9 @@ const styles = StyleSheet.create({
   flagBox: {
     width: 40,
     height: 40,
-    backgroundColor: Colors.surfaceContainer,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Colors.outlineVariant + '33',
   },
   flag: {
     fontSize: 22,
@@ -89,12 +89,10 @@ const styles = StyleSheet.create({
   code: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 15,
-    color: Colors.primary,
   },
   name: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 9,
-    color: Colors.onSurfaceVariant,
     letterSpacing: 1,
     textTransform: 'uppercase',
     opacity: 0.7,
@@ -104,7 +102,6 @@ const styles = StyleSheet.create({
     flex: 4,
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 16,
-    color: Colors.onSurface,
     textAlign: 'right',
   },
   change: {

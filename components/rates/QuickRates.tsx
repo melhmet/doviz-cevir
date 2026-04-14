@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 import { RateCard } from './RateCard';
 import { useRatesStore } from '@/store/useRatesStore';
 import { getRate } from '@/utils/convert';
@@ -13,18 +13,23 @@ const POPULAR_PAIRS = [
   { from: 'JPY', to: 'TRY', change: 0.0 },
 ];
 
-export function QuickRates() {
+interface QuickRatesProps {
+  onCardPress?: (currencyCode: string) => void;
+}
+
+export function QuickRates({ onCardPress }: QuickRatesProps) {
+  const { colors } = useTheme();
   const { rates, lastUpdated } = useRatesStore();
   const updateTime = lastUpdated ? formatTime(new Date(lastUpdated)) : '—';
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { borderBottomColor: colors.outlineVariant + '33' }]}>
         <View style={styles.headerLeft}>
-          <Text style={styles.headerTitle}>Popüler Kurlar</Text>
-          <View style={styles.headerUnderline} />
+          <Text style={[styles.headerTitle, { color: colors.onSurface }]}>Popüler Kurlar</Text>
+          <View style={[styles.headerUnderline, { backgroundColor: colors.primary }]} />
         </View>
-        <Text style={styles.headerTime}>
+        <Text style={[styles.headerTime, { color: colors.onSurfaceVariant }]}>
           Son Güncelleme: <Text style={styles.headerTimeValue}>{updateTime}</Text>
         </Text>
       </View>
@@ -35,6 +40,7 @@ export function QuickRates() {
               pair={`${pair.from}/${pair.to}`}
               value={getRate(pair.from, pair.to, rates)}
               change={pair.change}
+              onPress={() => onCardPress?.(pair.from)}
             />
           </View>
         ))}
@@ -52,7 +58,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     borderBottomWidth: 1,
-    borderBottomColor: Colors.outlineVariant + '33', // 20% opacity
     paddingBottom: 8,
     marginBottom: 16,
   },
@@ -62,7 +67,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 11,
-    color: Colors.onSurface,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
     paddingBottom: 8,
@@ -73,12 +77,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 2,
-    backgroundColor: Colors.primary,
   },
   headerTime: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 9,
-    color: Colors.onSurfaceVariant,
     letterSpacing: 0.5,
     textTransform: 'lowercase',
   },

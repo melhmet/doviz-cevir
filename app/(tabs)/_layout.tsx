@@ -2,11 +2,11 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
-function TabIcon({ name, color, focused }: { name: string; color: string; focused: boolean }) {
+function TabIcon({ name, color, focused, activeColor }: { name: string; color: string; focused: boolean; activeColor: string }) {
   return (
-    <View style={[styles.tabItem, focused && styles.tabItemActive]}>
+    <View style={[styles.tabItem, focused && [styles.tabItemActive, { borderTopColor: activeColor }]]}>
       <MaterialIcons name={name as any} size={24} color={color} />
     </View>
   );
@@ -17,13 +17,18 @@ function TabLabel({ label, color }: { label: string; color: string }) {
 }
 
 export default function TabLayout() {
+  const { colors } = useTheme();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.onSurfaceVariant,
+        tabBarStyle: [styles.tabBar, {
+          backgroundColor: colors.surfaceContainerLowest,
+          borderTopColor: colors.outlineVariant + '33',
+        }],
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.onSurfaceVariant,
         tabBarActiveBackgroundColor: 'transparent',
         tabBarInactiveBackgroundColor: 'transparent',
       }}
@@ -33,7 +38,7 @@ export default function TabLayout() {
         options={{
           title: 'Convert',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name="currency-exchange" color={color} focused={focused} />
+            <TabIcon name="currency-exchange" color={color} focused={focused} activeColor={colors.primary} />
           ),
           tabBarLabel: ({ color }) => <TabLabel label="CONVERT" color={color} />,
         }}
@@ -43,7 +48,7 @@ export default function TabLayout() {
         options={{
           title: 'Markets',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name="monitoring" color={color} focused={focused} />
+            <TabIcon name="show-chart" color={color} focused={focused} activeColor={colors.primary} />
           ),
           tabBarLabel: ({ color }) => <TabLabel label="MARKETS" color={color} />,
         }}
@@ -53,7 +58,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon name="settings-input-component" color={color} focused={focused} />
+            <TabIcon name="settings-input-component" color={color} focused={focused} activeColor={colors.primary} />
           ),
           tabBarLabel: ({ color }) => <TabLabel label="SETTINGS" color={color} />,
         }}
@@ -64,9 +69,7 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: Colors.surfaceContainerLowest,
     borderTopWidth: 1,
-    borderTopColor: Colors.outlineVariant + '33', // 20% opacity
     height: 70,
     paddingBottom: 8,
     paddingTop: 8,
@@ -77,7 +80,6 @@ const styles = StyleSheet.create({
   },
   tabItemActive: {
     borderTopWidth: 2,
-    borderTopColor: Colors.primary,
     paddingTop: 2,
     marginTop: -10,
   },

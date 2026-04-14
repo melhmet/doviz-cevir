@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 import { formatNumberTR } from '@/utils/format';
 
 interface RateInfoProps {
@@ -11,29 +11,32 @@ interface RateInfoProps {
 }
 
 export function RateInfo({ fromCode, toCode, rate }: RateInfoProps) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      backgroundColor: colors.surfaceContainerLow,
+      borderLeftColor: colors.primary + '80',
+    }]}>
       <View style={styles.left}>
-        <MaterialIcons name="info" size={18} color={Colors.primary} />
-        <Text style={styles.label}>
+        <MaterialIcons name="info" size={18} color={colors.primary} />
+        <Text style={[styles.label, { color: colors.onSurfaceVariant }]}>
           Market Orta Değer Kuru:{' '}
-          <Text style={styles.rateText}>
+          <Text style={[styles.rateText, { color: colors.onSurface }]}>
             1 {fromCode} = {formatNumberTR(rate, 5)} {toCode}
           </Text>
         </Text>
       </View>
-      <MaterialIcons name="show-chart" size={18} color={Colors.primary} />
+      <MaterialIcons name="show-chart" size={18} color={colors.primary} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.surfaceContainerLow,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderLeftWidth: 2,
-    borderLeftColor: Colors.primary + '80', // 50% opacity
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -47,12 +50,10 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'SpaceGrotesk',
     fontSize: 11,
-    color: Colors.onSurfaceVariant,
     letterSpacing: 0.5,
   },
   rateText: {
     fontFamily: 'JetBrainsMono-Bold',
     fontSize: 11,
-    color: Colors.onSurface,
   },
 });

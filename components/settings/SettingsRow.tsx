@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SettingsRowProps {
   label: string;
@@ -18,19 +18,25 @@ export function SettingsRow({
   rightIcon = 'chevron-right',
   destructive = false,
 }: SettingsRowProps) {
+  const { colors } = useTheme();
+
   return (
     <Pressable
-      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.container,
+        { backgroundColor: colors.surfaceContainer },
+        pressed && { backgroundColor: colors.surfaceBright },
+      ]}
       onPress={onPress}
     >
       <View style={styles.left}>
-        <Text style={[styles.label, destructive && styles.labelDestructive]}>{label}</Text>
-        {value && <Text style={styles.value}>{value}</Text>}
+        <Text style={[styles.label, { color: destructive ? colors.error + 'CC' : colors.onSurface }]}>{label}</Text>
+        {value && <Text style={[styles.value, { color: colors.onSurfaceVariant }]}>{value}</Text>}
       </View>
       <MaterialIcons
         name={rightIcon}
         size={20}
-        color={destructive ? Colors.error + 'CC' : Colors.onSurfaceVariant}
+        color={destructive ? colors.error + 'CC' : colors.onSurfaceVariant}
       />
     </Pressable>
   );
@@ -38,15 +44,11 @@ export function SettingsRow({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.surfaceContainer,
     paddingHorizontal: 24,
     paddingVertical: 18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  pressed: {
-    backgroundColor: Colors.surfaceBright,
   },
   left: {
     flex: 1,
@@ -54,17 +56,12 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 11,
-    color: Colors.onSurface,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
-  },
-  labelDestructive: {
-    color: Colors.error + 'CC',
   },
   value: {
     fontFamily: 'JetBrainsMono',
     fontSize: 12,
-    color: Colors.onSurfaceVariant,
     marginTop: 4,
   },
 });

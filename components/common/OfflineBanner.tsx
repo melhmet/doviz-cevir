@@ -1,16 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface OfflineBannerProps {
   message?: string;
 }
 
 export function OfflineBanner({ message = 'Eski kur verisi kullanılıyor' }: OfflineBannerProps) {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
-      <MaterialIcons name="wifi-off" size={14} color={Colors.onPrimary} />
+    <View style={[styles.container, { backgroundColor: colors.error + 'CC' }]}>
+      <MaterialIcons name="wifi-off" size={14} color={colors.onPrimary} />
       <Text style={styles.text}>{message}</Text>
     </View>
   );
@@ -18,7 +20,6 @@ export function OfflineBanner({ message = 'Eski kur verisi kullanılıyor' }: Of
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.error + 'CC',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

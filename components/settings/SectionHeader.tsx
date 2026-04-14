@@ -1,16 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SectionHeaderProps {
   title: string;
 }
 
 export function SectionHeader({ title }: SectionHeaderProps) {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
-      <View style={styles.dot} />
-      <Text style={styles.title}>{title}</Text>
+      <View style={[styles.dot, { backgroundColor: colors.secondary }]} />
+      <Text style={[styles.title, { color: colors.onSurfaceVariant }]}>{title}</Text>
     </View>
   );
 }
@@ -25,12 +27,10 @@ const styles = StyleSheet.create({
   dot: {
     width: 8,
     height: 8,
-    backgroundColor: Colors.secondary,
   },
   title: {
     fontFamily: 'SpaceGrotesk-Bold',
     fontSize: 11,
-    color: Colors.onSurfaceVariant,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },

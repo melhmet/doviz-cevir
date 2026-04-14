@@ -17,7 +17,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import 'react-native-reanimated';
-import { Colors } from '@/constants/colors';
+import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -26,6 +26,32 @@ export const unstable_settings = {
 };
 
 SplashScreen.preventAutoHideAsync();
+
+function RootLayoutContent() {
+  const { colors, isDark } = useTheme();
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.surfaceContainerLowest }}>
+      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.surfaceContainerLowest} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.surfaceContainerLowest },
+          animation: 'fade',
+        }}
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="currency-select"
+          options={{
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
+      </Stack>
+    </View>
+  );
+}
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -54,24 +80,8 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.surfaceContainerLowest }}>
-      <StatusBar style="light" backgroundColor={Colors.surfaceContainerLowest} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: Colors.surfaceContainerLowest },
-          animation: 'fade',
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="currency-select"
-          options={{
-            presentation: 'modal',
-            animation: 'slide_from_bottom',
-          }}
-        />
-      </Stack>
-    </View>
+    <ThemeProvider>
+      <RootLayoutContent />
+    </ThemeProvider>
   );
 }

@@ -1,16 +1,30 @@
 import React from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface ToggleSwitchProps {
   value: boolean;
   onToggle: () => void;
+  disabled?: boolean;
 }
 
-export function ToggleSwitch({ value, onToggle }: ToggleSwitchProps) {
+export function ToggleSwitch({ value, onToggle, disabled = false }: ToggleSwitchProps) {
+  const { colors } = useTheme();
+
   return (
-    <Pressable style={[styles.track, value && styles.trackActive]} onPress={onToggle}>
-      <View style={[styles.thumb, value && styles.thumbActive]} />
+    <Pressable
+      style={[
+        styles.track,
+        { backgroundColor: value ? colors.primary : colors.surfaceContainerHighest },
+        disabled && { opacity: 0.4 },
+      ]}
+      onPress={disabled ? undefined : onToggle}
+    >
+      <View style={[
+        styles.thumb,
+        { backgroundColor: value ? colors.onPrimary : colors.outlineVariant },
+        value && styles.thumbActive,
+      ]} />
     </Pressable>
   );
 }
@@ -19,21 +33,15 @@ const styles = StyleSheet.create({
   track: {
     width: 48,
     height: 24,
-    backgroundColor: Colors.surfaceContainerHighest,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 4,
   },
-  trackActive: {
-    backgroundColor: Colors.primary,
-  },
   thumb: {
     width: 16,
     height: 16,
-    backgroundColor: Colors.outlineVariant,
   },
   thumbActive: {
-    backgroundColor: Colors.onPrimary,
     marginLeft: 'auto',
   },
 });

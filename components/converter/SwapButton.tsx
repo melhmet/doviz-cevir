@@ -1,26 +1,33 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/colors';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SwapButtonProps {
   onPress: () => void;
 }
 
 export function SwapButton({ onPress }: SwapButtonProps) {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.wrapper}>
       <Pressable
-        style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.button,
+          {
+            backgroundColor: colors.primaryContainer,
+            shadowColor: colors.primaryContainer,
+          },
+          pressed && { transform: [{ scale: 0.95 }], backgroundColor: colors.primary },
+        ]}
         onPress={onPress}
       >
-        <MaterialIcons name="swap-vert" size={28} color={Colors.onPrimary} />
+        <MaterialIcons name="swap-vert" size={28} color={colors.onPrimary} />
       </Pressable>
     </View>
   );
 }
-
-import { View } from 'react-native';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -32,18 +39,11 @@ const styles = StyleSheet.create({
   button: {
     width: 56,
     height: 56,
-    backgroundColor: '#00e6bf',
     alignItems: 'center',
     justifyContent: 'center',
-    // Glow effect
-    shadowColor: Colors.primaryContainer,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 15,
     elevation: 10,
-  },
-  pressed: {
-    transform: [{ scale: 0.95 }],
-    backgroundColor: '#1affd5',
   },
 });
