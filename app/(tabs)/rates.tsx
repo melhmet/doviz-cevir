@@ -14,14 +14,6 @@ import { useExchangeRates } from '@/hooks/useExchangeRates';
 import { currencies } from '@/utils/currencies';
 import { getRate } from '@/utils/convert';
 
-// Simulated daily changes (would come from API in production)
-const MOCK_CHANGES: Record<string, number> = {
-  USD: 0.12, EUR: -0.05, GBP: -0.11, CHF: 0.08, JPY: -0.32,
-  SAR: 0.01, AED: 0.03, CAD: -0.15, AUD: 0.22, RUB: -0.45,
-  CNY: 0.07, KWD: 0.02, NOK: -0.09, SEK: 0.18, DKK: -0.03,
-  BGN: 0.06, GEL: -0.12, QAR: 0.01, KRW: 0.34,
-};
-
 export default function RatesScreen() {
   const [search, setSearch] = useState('');
   const { colors } = useTheme();
@@ -84,7 +76,7 @@ export default function RatesScreen() {
           <RateListItem
             code={item.code}
             price={getRate(item.code, 'TRY', rates)}
-            change={MOCK_CHANGES[item.code] || 0}
+            change={null}
             index={index}
             onPress={() => openDetail(item.code)}
           />
@@ -96,7 +88,7 @@ export default function RatesScreen() {
       <CurrencyDetailSheet
         visible={detailVisible}
         currencyCode={detailCode}
-        change={detailCode ? MOCK_CHANGES[detailCode] || 0 : 0}
+        change={null}
         onClose={() => setDetailVisible(false)}
       />
 

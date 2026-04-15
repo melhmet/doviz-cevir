@@ -8,7 +8,7 @@ import { getCurrency } from '@/utils/currencies';
 interface RateListItemProps {
   code: string;
   price: number;
-  change: number;
+  change: number | null;
   index: number;
   onPress?: () => void;
 }
@@ -17,8 +17,8 @@ export function RateListItem({ code, price, change, index, onPress }: RateListIt
   const { colors } = useTheme();
   const decimalPrecision = useSettingsStore((s) => s.decimalPrecision);
   const currency = getCurrency(code);
-  const isPositive = change > 0;
-  const changeColor = change === 0
+  const isPositive = change != null && change > 0;
+  const changeColor = change == null || change === 0
     ? colors.onSurfaceVariant
     : isPositive
       ? colors.primary

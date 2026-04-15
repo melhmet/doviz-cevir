@@ -14,14 +14,14 @@ import { formatNumberTR, formatChange } from '@/utils/format';
 interface CurrencyDetailSheetProps {
   visible: boolean;
   currencyCode: string | null;
-  change?: number;
+  change?: number | null;
   onClose: () => void;
 }
 
 export function CurrencyDetailSheet({
   visible,
   currencyCode,
-  change = 0,
+  change = null,
   onClose,
 }: CurrencyDetailSheetProps) {
   const { colors } = useTheme();
@@ -37,8 +37,8 @@ export function CurrencyDetailSheet({
   const rate = getRate(currencyCode, 'TRY', rates);
   const inverseRate = rate > 0 ? 1 / rate : 0;
   const favorite = isFavorite(currencyCode);
-  const isPositive = change > 0;
-  const changeColor = change === 0
+  const isPositive = change != null && change > 0;
+  const changeColor = change == null || change === 0
     ? colors.onSurfaceVariant
     : isPositive
       ? colors.primary

@@ -8,7 +8,7 @@ import { formatNumberTR, formatChange } from '@/utils/format';
 interface RateCardProps {
   pair: string;
   value: number;
-  change: number;
+  change: number | null;
   onPress?: () => void;
 }
 
@@ -16,8 +16,8 @@ export function RateCard({ pair, value, change, onPress }: RateCardProps) {
   const { colors } = useTheme();
   const decimalPrecision = useSettingsStore((s) => s.decimalPrecision);
 
-  const isPositive = change > 0;
-  const isNeutral = change === 0;
+  const isPositive = change != null && change > 0;
+  const isNeutral = change == null || change === 0;
   const changeColor = isNeutral
     ? colors.onSurfaceVariant
     : isPositive

@@ -1,14 +1,41 @@
-import { createMMKV } from 'react-native-mmkv';
-import type { MMKV } from 'react-native-mmkv';
 import { Config } from '@/constants/config';
 
-let storage: MMKV | null = null;
+interface StorageLike {
+  set(key: string, value: string | number | boolean): void;
+  getString(key: string): string | undefined;
+  getNumber(key: string): number | undefined;
+  remove(key: string): void;
+  clearAll(): void;
+}
 
-function getStorage(): MMKV {
+let storage: StorageLike | null = null;
+
+function getStorage(): StorageLike {
   if (!storage) {
-    storage = createMMKV({ id: 'doviz-cevir-cache' });
+    try {
+      const { createMMKV } = require('react-native-mmkv');
+      storage = createMMKV({ id: 'doviz-cevir-cache' });
+    } catch {
+      // Expo Go / environment fallback: in-memory storage
+      const mem: Record<string, string | number> = {};
+      storage = {
+        getString: (k: string) => {
+          const v = mem[k];
+          return typeof v === 'string' ? v : undefined;
+        },
+        getNumber: (k: string) => {
+          const v = mem[k];
+          return typeof v === 'number' ? v : undefined;
+        },
+        set: (k: string, v: string | number | boolean) => {
+          mem[k] = typeof v === 'boolean' ? String(v) : v;
+        },
+        remove: (k: string) => { delete mem[k]; },
+        clearAll: () => { Object.keys(mem).forEach((k) => delete mem[k]); },
+      };
+    }
   }
-  return storage;
+  return storage!;
 }
 
 export const cache = {

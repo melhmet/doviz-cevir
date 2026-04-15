@@ -37,8 +37,10 @@ export function formatPrice(value: number, decimals: number = 4): string {
 /**
  * Format percentage change
  * e.g. 0.12 → "+0,12%", -0.05 → "-0,05%"
+ * Returns "—" when value is null/undefined (no data available)
  */
-export function formatChange(value: number): string {
+export function formatChange(value: number | null | undefined): string {
+  if (value == null) return '—';
   const sign = value > 0 ? '+' : '';
   return `${sign}${value.toFixed(2).replace('.', ',')}%`;
 }

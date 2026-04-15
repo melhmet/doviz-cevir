@@ -9,7 +9,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 interface TickerItem {
   pair: string;
   value: number;
-  change: number;
+  change: number | null;
 }
 
 export function TickerTape() {
@@ -18,11 +18,11 @@ export function TickerTape() {
   const { rates } = useRatesStore();
 
   const tickerItems: TickerItem[] = [
-    { pair: 'USD/TRY', value: rates['TRY'] || 0, change: 0.12 },
-    { pair: 'EUR/TRY', value: (rates['TRY'] || 0) / (rates['EUR'] || 1), change: -0.05 },
-    { pair: 'GBP/TRY', value: (rates['TRY'] || 0) / (rates['GBP'] || 1), change: -0.11 },
-    { pair: 'CHF/TRY', value: (rates['TRY'] || 0) / (rates['CHF'] || 1), change: 0.08 },
-    { pair: 'JPY/TRY', value: (rates['TRY'] || 0) / (rates['JPY'] || 1) * 100, change: -0.32 },
+    { pair: 'USD/TRY', value: rates['TRY'] || 0, change: null },
+    { pair: 'EUR/TRY', value: (rates['TRY'] || 0) / (rates['EUR'] || 1), change: null },
+    { pair: 'GBP/TRY', value: (rates['TRY'] || 0) / (rates['GBP'] || 1), change: null },
+    { pair: 'CHF/TRY', value: (rates['TRY'] || 0) / (rates['CHF'] || 1), change: null },
+    { pair: '100 JPY/TRY', value: (rates['TRY'] || 0) / (rates['JPY'] || 1) * 100, change: null },
   ];
 
   useEffect(() => {
@@ -38,8 +38,8 @@ export function TickerTape() {
   }, [scrollX]);
 
   const renderItem = (item: TickerItem, index: number) => {
-    const isPositive = item.change > 0;
-    const changeColor = item.change === 0
+    const isPositive = item.change != null && item.change > 0;
+    const changeColor = item.change == null || item.change === 0
       ? colors.onSurfaceVariant
       : isPositive
         ? colors.primary
@@ -51,9 +51,11 @@ export function TickerTape() {
         <Text style={[styles.value, { color: colors.onSurface }]}>
           {item.value > 0 ? formatNumberTR(item.value, 2) : '—'}
         </Text>
-        <Text style={[styles.change, { color: changeColor }]}>
-          {isPositive ? '▲' : item.change < 0 ? '▼' : '—'} {formatChange(item.change)}
-        </Text>
+        {item.change != null && (
+          <Text style={[styles.change, { color: changeColor }]}>
+            {isPositive ? '▲' : item.change < 0 ? '▼' : '—'} {formatChange(item.change)}
+          </Text>
+        )}
       </View>
     );
   };

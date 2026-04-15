@@ -7,10 +7,10 @@ import { getRate } from '@/utils/convert';
 import { formatTime } from '@/utils/format';
 
 const POPULAR_PAIRS = [
-  { from: 'EUR', to: 'TRY', change: 0.12 },
-  { from: 'GBP', to: 'TRY', change: -0.05 },
-  { from: 'CHF', to: 'TRY', change: 0.44 },
-  { from: 'JPY', to: 'TRY', change: 0.0 },
+  { from: 'EUR', to: 'TRY' },
+  { from: 'GBP', to: 'TRY' },
+  { from: 'CHF', to: 'TRY' },
+  { from: 'JPY', to: 'TRY' },
 ];
 
 interface QuickRatesProps {
@@ -39,7 +39,7 @@ export function QuickRates({ onCardPress }: QuickRatesProps) {
             <RateCard
               pair={`${pair.from}/${pair.to}`}
               value={getRate(pair.from, pair.to, rates)}
-              change={pair.change}
+              change={null}
               onPress={() => onCardPress?.(pair.from)}
             />
           </View>
