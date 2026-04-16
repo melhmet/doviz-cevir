@@ -83,7 +83,7 @@ export function MarketAnalysis() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <MaterialIcons name={'article' as any} size={18} color={colors.primary} />
+          <MaterialIcons name={'article' as React.ComponentProps<typeof MaterialIcons>['name']} size={18} color={colors.primary} />
           <Text style={[styles.title, { color: colors.primary }]}>Finans Haberleri</Text>
         </View>
         {!loading && (

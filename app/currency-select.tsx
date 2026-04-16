@@ -18,6 +18,8 @@ const TITLES: Record<Target, string> = {
   'settings-default': 'Varsayılan Para Birimi',
 };
 
+const VALID_TARGETS: Target[] = ['from', 'to', 'settings-default'];
+
 export default function CurrencySelectScreen() {
   const router = useRouter();
   const { target } = useLocalSearchParams<{ target: Target }>();
@@ -25,6 +27,12 @@ export default function CurrencySelectScreen() {
   const { defaultCurrency, setDefaultCurrency } = useSettingsStore();
   const { colors } = useTheme();
   const [search, setSearch] = useState('');
+
+  React.useEffect(() => {
+    if (!target || !VALID_TARGETS.includes(target as Target)) {
+      router.back();
+    }
+  }, [target]);
 
   const selectedCode =
     target === 'settings-default'

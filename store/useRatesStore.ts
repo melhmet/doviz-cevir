@@ -3,6 +3,8 @@ import { fetchLatestRates, RatesResponse } from '@/services/exchangeRate';
 import { cache } from '@/services/cache';
 import { Config } from '@/constants/config';
 
+const MIN_FETCH_INTERVAL_MS = 5000;
+
 interface RatesState {
   rates: Record<string, number>;
   base: string;
@@ -10,6 +12,7 @@ interface RatesState {
   isLoading: boolean;
   error: string | null;
   isFromCache: boolean;
+  lastFetchTime: number;
   fetchRates: (base?: string) => Promise<void>;
 }
 
@@ -20,9 +23,12 @@ export const useRatesStore = create<RatesState>((set, get) => ({
   isLoading: false,
   error: null,
   isFromCache: false,
+  lastFetchTime: 0,
 
   fetchRates: async (base = 'USD') => {
-    set({ isLoading: true, error: null });
+    const now = Date.now();
+    if (now - get().lastFetchTime < MIN_FETCH_INTERVAL_MS) return;
+    set({ isLoading: true, error: null, lastFetchTime: now });
 
     // Check cache first
     if (!cache.isExpired(Config.CACHE_KEY_RATES)) {

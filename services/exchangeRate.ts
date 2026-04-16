@@ -1,5 +1,6 @@
 import { exchangeRateApi, freeCurrencyApi } from './api';
 import { Config } from '@/constants/config';
+import { isValidCurrencyCode } from '@/utils/currencies';
 
 export interface RatesResponse {
   base: string;
@@ -11,6 +12,10 @@ export interface RatesResponse {
  * Fetch latest exchange rates from primary API (ExchangeRate-API)
  */
 export async function fetchLatestRates(base: string = 'USD'): Promise<RatesResponse> {
+  if (!isValidCurrencyCode(base)) {
+    throw new Error(`Invalid currency code: ${base}`);
+  }
+
   try {
     const response = await exchangeRateApi.get(
       `/${Config.EXCHANGE_RATE_API_KEY}/latest/${base}`
@@ -26,7 +31,7 @@ export async function fetchLatestRates(base: string = 'USD'): Promise<RatesRespo
 
     throw new Error(response.data['error-type'] || 'API error');
   } catch (primaryError) {
-    console.warn('[Primary API failed, trying fallback]', primaryError);
+    if (__DEV__) console.warn('[Primary API failed, trying fallback]', primaryError);
     return fetchFallbackRates(base);
   }
 }
@@ -35,6 +40,10 @@ export async function fetchLatestRates(base: string = 'USD'): Promise<RatesRespo
  * Fallback: FreecurrencyAPI
  */
 async function fetchFallbackRates(base: string): Promise<RatesResponse> {
+  if (!isValidCurrencyCode(base)) {
+    throw new Error(`Invalid currency code: ${base}`);
+  }
+
   const response = await freeCurrencyApi.get('/latest', {
     params: {
       apikey: Config.FREE_CURRENCY_API_KEY,

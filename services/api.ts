@@ -21,7 +21,7 @@ export const freeCurrencyApi = axios.create({
 exchangeRateApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.warn('[ExchangeRate API Error]', error.message);
+    if (__DEV__) console.warn('[ExchangeRate API Error]', error.message);
     return Promise.reject(error);
   }
 );
@@ -29,7 +29,7 @@ exchangeRateApi.interceptors.response.use(
 freeCurrencyApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.warn('[FreeCurrency API Error]', error.message);
+    if (__DEV__) console.warn('[FreeCurrency API Error]', error.message);
     return Promise.reject(error);
   }
 );

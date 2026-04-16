@@ -4,10 +4,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@/contexts/ThemeContext';
 
-function TabIcon({ name, color, focused, activeColor }: { name: string; color: string; focused: boolean; activeColor: string }) {
+function TabIcon({ name, color, focused, activeColor }: { name: React.ComponentProps<typeof MaterialIcons>['name']; color: string; focused: boolean; activeColor: string }) {
   return (
     <View style={[styles.tabItem, focused && [styles.tabItemActive, { borderTopColor: activeColor }]]}>
-      <MaterialIcons name={name as any} size={24} color={color} />
+      <MaterialIcons name={name} size={24} color={color} />
     </View>
   );
 }

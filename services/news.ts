@@ -52,7 +52,7 @@ export async function fetchFinanceNews(): Promise<NewsArticle[]> {
     }
     return articles;
   } catch (error) {
-    console.warn('[GNews API Error]', error);
+    if (__DEV__) console.warn('[GNews API Error]', error);
 
     // Fallback to stale cache
     const stale = cache.get<NewsArticle[]>(Config.NEWS_CACHE_KEY);

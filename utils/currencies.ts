@@ -70,4 +70,8 @@ export function getCurrency(code: string): Currency | undefined {
   return currencyMap.get(code);
 }
 
+export function isValidCurrencyCode(code: string): boolean {
+  return currencyMap.has(code);
+}
+
 export const popularPairs = ['EUR', 'GBP', 'CHF', 'JPY'] as const;
