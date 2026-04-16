@@ -54,6 +54,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="news"
+        options={{
+          title: 'News',
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name="article" color={color} focused={focused} activeColor={colors.primary} />
+          ),
+          tabBarLabel: ({ color }) => <TabLabel label="NEWS" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',

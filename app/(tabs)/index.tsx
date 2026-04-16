@@ -120,7 +120,7 @@ export default function ConverterScreen() {
             { backgroundColor: colors.primaryContainer },
             pressed && styles.analysisButtonPressed,
           ]}
-          onPress={() => router.push('/rates')}
+          onPress={() => router.push('/news')}
         >
           <Text style={[styles.analysisButtonText, { color: colors.onPrimary }]}>DETAYLI ANALİZ</Text>
           <MaterialIcons name="analytics" size={20} color={colors.onPrimary} />

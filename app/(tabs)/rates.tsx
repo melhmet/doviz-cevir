@@ -7,7 +7,6 @@ import { ProgressLine } from '@/components/common/ProgressLine';
 import { TickerTape } from '@/components/common/TickerTape';
 import { SearchInput } from '@/components/rates/SearchInput';
 import { RateListItem } from '@/components/rates/RateListItem';
-import { MarketAnalysis } from '@/components/rates/MarketAnalysis';
 import { CurrencyDetailSheet } from '@/components/rates/CurrencyDetailSheet';
 import { FavoritesSheet } from '@/components/common/FavoritesSheet';
 import { useExchangeRates } from '@/hooks/useExchangeRates';
@@ -56,12 +55,6 @@ export default function RatesScreen() {
     </View>
   );
 
-  const renderFooter = () => (
-    <View style={styles.footer}>
-      <MarketAnalysis />
-    </View>
-  );
-
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.surfaceContainerLowest }]} edges={['top']}>
       <ProgressLine />
@@ -71,7 +64,6 @@ export default function RatesScreen() {
         data={filteredCurrencies}
         keyExtractor={(item) => item.code}
         ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
         renderItem={({ item, index }) => (
           <RateListItem
             code={item.code}
@@ -134,8 +126,5 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
-  },
-  footer: {
-    marginTop: 32,
   },
 });
